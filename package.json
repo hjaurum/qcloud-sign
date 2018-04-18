@@ -1,0 +1,31 @@
+{
+  "name": "qcloud-sign",
+  "version": "0.0.1",
+  "description": "腾讯云公共参数签名node SDK.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hjaurum/qcloud-sign.git"
+  },
+  "keywords": [
+    "qcloud",
+    "tencent",
+    "sign",
+    "signature"
+  ],
+  "author": "hjaurum@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hjaurum/qcloud-sign/issues"
+  },
+  "homepage": "https://github.com/hjaurum/qcloud-sign#readme",
+  "dependencies": {
+    "lodash": "^4.17.5"
+  },
+  "devDependencies": {
+    "mocha": "^5.1.0"
+  }
+}
