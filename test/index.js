@@ -10,7 +10,7 @@ const sign = new Sign({
 
 describe('签名', function () {
     it('签名,ok', function () {
-        const signature = sign.getSignature({
+        const params = sign.getSignature({
             "Action": "DescribeInstances",
             "Nonce": 11886,
             "Region": "ap-guangzhou",
@@ -22,7 +22,7 @@ describe('签名', function () {
             domain: 'cvm.api.qcloud.com',
             path: '/v2/index.php'
         });
-        console.log(signature);
-        assert.equal(signature.signature, '0EEm/HtGRr/VJXTAD9tYMth1Bzm3lLHz5RCDv1GdM8s=');
+        console.log(params);
+        assert.equal(params.Signature, '0EEm/HtGRr/VJXTAD9tYMth1Bzm3lLHz5RCDv1GdM8s=');
     });
 });

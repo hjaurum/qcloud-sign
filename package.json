@@ -1,6 +1,6 @@
 {
   "name": "qcloud-sign",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "腾讯云公共参数签名node SDK.",
   "main": "index.js",
   "scripts": {

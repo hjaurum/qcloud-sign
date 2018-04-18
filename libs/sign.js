@@ -35,7 +35,7 @@ Sign.prototype = {
      * @param options.method {String} 必传，请求方法
      * @param options.domain {String} 必传，请求域名
      * @param options.path {String} 必传，请求路径
-     * @returns {{nonce: (number|*), timestamp: (number|*), signature: *}}
+     * @returns {*} 返回的Signture是未encodeURI的，需要自己处理
      */
     getSignature: function (params, options) {
         if (!options.method || !options.domain || !options.path) {
@@ -66,12 +66,8 @@ Sign.prototype = {
         const method = options.method.toUpperCase();
         const signatureStr = method + options.domain + options.path + '?' + paramStr;
         const signatureMathod = params.SignatureMethod === 'HmacSHA256' ? 'sha256' : 'sha1';
-        const signature = crypto.createHmac(signatureMathod, this.secretKey).update(signatureStr).digest('base64');
+        params.Signature = crypto.createHmac(signatureMathod, this.secretKey).update(signatureStr).digest('base64');
 
-        return {
-            nonce: params.Nonce,
-            timestamp: params.Timestamp,
-            signature: signature,
-        };
+        return params;
     }
 };
