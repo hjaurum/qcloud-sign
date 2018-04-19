@@ -54,20 +54,39 @@ Sign.prototype = {
         const sortedKeys = _.keys(params).sort();
         var paramStr = '';
         sortedKeys.forEach(function (key) {
-            // 若输入参数的 Key 中包含下划线，则需要将其转换为“.”
-            // 但是 Value 中的下划线则不用转换
-            // 如 Placement_Zone=CN_GUANGZHOU
-            // 则需要将其转换成 Placement.Zone=CN_GUANGZHOU
-            key = key.replace('_', '.');
-            paramStr += key + '=' + params[key] + '&';
+            const value = params[key];
+            if (typeof value === 'object') {
+                const innerKeys = _.keys(value);
+                innerKeys.forEach(function (innerKey) {
+                    key = key.replace('_', '.');
+                    paramStr += key + '.' + innerKey + '=' + value[innerKey] + '&';
+                });
+            } else {
+                // 若输入参数的 Key 中包含下划线，则需要将其转换为“.”
+                // 但是 Value 中的下划线则不用转换
+                // 如 Placement_Zone=CN_GUANGZHOU
+                // 则需要将其转换成 Placement.Zone=CN_GUANGZHOU
+                key = key.replace('_', '.');
+                paramStr += key + '=' + value + '&';
+            }
+
         });
         paramStr = paramStr.slice(0, -1); // 去掉最后一个&
 
         const method = options.method.toUpperCase();
         const signatureStr = method + options.domain + options.path + '?' + paramStr;
         const signatureMathod = params.SignatureMethod === 'HmacSHA256' ? 'sha256' : 'sha1';
-        params.Signature = crypto.createHmac(signatureMathod, this.secretKey).update(signatureStr).digest('base64');
+        const signature = crypto.createHmac(signatureMathod, this.secretKey).update(signatureStr).digest('base64');
 
-        return params;
+        // 返回对象
+        const returnObj = {};
+        const paramArr = paramStr.split('&');
+        paramArr.forEach(function (paramPair) {
+            const pair = paramPair.split('=');
+            returnObj[pair[0]] = pair[1];
+        });
+        returnObj.Signature = signature;
+
+        return returnObj;
     }
 };
