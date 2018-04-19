@@ -45,7 +45,7 @@ Sign.prototype = {
             options.path = '/' + options.path;
         }
         _.defaults(params, {
-            Nonce: Math.random().toFixed(5) * 100000,
+            Nonce: Math.floor(Math.random().toFixed(5) * 100000),
             Timestamp: Math.floor(Date.now() / 1000),
             SignatureMethod: 'HmacSHA256', // 签名算法默认Hmac256
             SecretId: this.secretId,
