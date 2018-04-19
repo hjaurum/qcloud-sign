@@ -51,27 +51,26 @@ Sign.prototype = {
             SecretId: this.secretId,
         });
 
-        const sortedKeys = _.keys(params).sort();
-        var paramStr = '';
-        sortedKeys.forEach(function (key) {
-            const value = params[key];
+        const outerKeys = _.keys(params);
+        const paramArr = [];
+        outerKeys.forEach(function (outerKey) {
+            const value = params[outerKey];
             if (typeof value === 'object') {
                 const innerKeys = _.keys(value);
                 innerKeys.forEach(function (innerKey) {
-                    key = key.replace('_', '.');
-                    paramStr += key + '.' + innerKey + '=' + value[innerKey] + '&';
+                    outerKey = outerKey.replace('_', '.');
+                    paramArr.push(outerKey + '.' + innerKey + '=' + value[innerKey]);
                 });
             } else {
                 // 若输入参数的 Key 中包含下划线，则需要将其转换为“.”
                 // 但是 Value 中的下划线则不用转换
                 // 如 Placement_Zone=CN_GUANGZHOU
                 // 则需要将其转换成 Placement.Zone=CN_GUANGZHOU
-                key = key.replace('_', '.');
-                paramStr += key + '=' + value + '&';
+                outerKey = outerKey.replace('_', '.');
+                paramArr.push(outerKey + '=' + value);
             }
-
         });
-        paramStr = paramStr.slice(0, -1); // 去掉最后一个&
+        const paramStr = paramArr.sort().join('&');
 
         const method = options.method.toUpperCase();
         const signatureStr = method + options.domain + options.path + '?' + paramStr;
@@ -80,7 +79,6 @@ Sign.prototype = {
 
         // 返回对象
         const returnObj = {};
-        const paramArr = paramStr.split('&');
         paramArr.forEach(function (paramPair) {
             const pair = paramPair.split('=');
             returnObj[pair[0]] = pair[1];
